@@ -1,6 +1,6 @@
-diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/core/pathmap.mk pang/build/core/pathmap.mk
---- cyanogen/build/core/pathmap.mk	2012-02-12 10:46:06.619527114 -0800
-+++ pang/build/core/pathmap.mk	2012-02-23 23:17:06.084418404 -0800
+diff -Npru --exclude=.svn --exclude='.git*' aosp/build/core/pathmap.mk pdroid/build/core/pathmap.mk
+--- aosp/build/core/pathmap.mk	2012-02-26 01:14:17.000000000 -0800
++++ pdroid/build/core/pathmap.mk	2012-03-30 13:21:22.138333718 -0700
 @@ -77,6 +77,7 @@ JNI_H_INCLUDE := $(call include-path-for
  # is so common and the other framework libraries can have mutual
  # interdependencies.
@@ -25,18 +25,18 @@ diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/core/pathmap.mk pang/
  
  #
  # A version of FRAMEWORKS_BASE_SUBDIRS that is expanded to full paths from
-diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/core.mk pang/build/target/product/core.mk
---- cyanogen/build/target/product/core.mk	2012-02-12 10:46:06.656529307 -0800
-+++ pang/build/target/product/core.mk	2012-02-23 23:17:06.084418404 -0800
-@@ -18,6 +18,7 @@ PRODUCT_BRAND := generic
- PRODUCT_DEVICE := generic
- PRODUCT_NAME := core
+diff -Npru --exclude=.svn --exclude='.git*' aosp/build/target/product/core.mk pdroid/build/target/product/core.mk
+--- aosp/build/target/product/core.mk	2012-02-26 01:14:17.000000000 -0800
++++ pdroid/build/target/product/core.mk	2012-03-30 13:21:22.139333768 -0700
+@@ -22,6 +22,7 @@ PRODUCT_PROPERTY_OVERRIDES := \
+     ro.config.notification_sound=OnTheHunt.ogg \
+     ro.config.alarm_alert=Alarm_Classic.ogg
  
 +# BEGIN privacy-added: PDroid
  PRODUCT_PACKAGES := \
      ApplicationsProvider \
      BackupRestoreConfirmation \
-@@ -31,6 +32,7 @@ PRODUCT_PACKAGES := \
+@@ -35,6 +36,7 @@ PRODUCT_PACKAGES := \
      Home \
      KeyChain \
      MediaProvider \
@@ -44,7 +44,7 @@ diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/core.m
      PackageInstaller \
      PicoTts \
      SettingsProvider \
-@@ -94,6 +96,7 @@ PRODUCT_PACKAGES := \
+@@ -98,6 +100,7 @@ PRODUCT_PACKAGES := \
      libz \
      screencap \
      sensorservice
@@ -52,10 +52,10 @@ diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/core.m
  
  # host-only dependencies
  ifeq ($(WITH_HOST_DALVIK),true)
-Binary files android-2.3.4_r1.clean/build/target/product/security/privacy.pk8 and android-2.3.4_r1/build/target/product/security/privacy.pk8 differ
-diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/security/privacy.x509.pem pang/build/target/product/security/privacy.x509.pem
---- cyanogen/build/target/product/security/privacy.x509.pem	1969-12-31 16:00:00.000000000 -0800
-+++ pang/build/target/product/security/privacy.x509.pem	2012-02-23 23:17:06.091418819 -0800
+Binary files aosp/build/target/product/security/privacy.pk8 and pdroid/build/target/product/security/privacy.pk8 differ
+diff -Npru --exclude=.svn --exclude='.git*' aosp/build/target/product/security/privacy.x509.pem pdroid/build/target/product/security/privacy.x509.pem
+--- aosp/build/target/product/security/privacy.x509.pem	1969-12-31 16:00:00.000000000 -0800
++++ pdroid/build/target/product/security/privacy.x509.pem	2012-03-30 13:21:22.140333818 -0700
 @@ -0,0 +1,20 @@
 +-----BEGIN CERTIFICATE-----
 +MIIDNDCCAhwCCQCXWkdOAj3rWTANBgkqhkiG9w0BAQUFADBcMQswCQYDVQQGEwJE

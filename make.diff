@@ -1,0 +1,20 @@
+diff -Npru --exclude=.svn --exclude='.git*' AOSP/build/core/main.mk pdroid/build/core/main.mk
+--- AOSP/build/core/main.mk	2012-02-26 01:14:17.567002529 -0800
++++ pdroid/build/core/main.mk	2012-02-26 01:48:36.634204839 -0800
+@@ -39,13 +39,15 @@ endif
+ 
+ # check for broken versions of make
+ ifeq (0,$(shell expr $$(echo $(MAKE_VERSION) | sed "s/[^0-9\.].*//") = 3.81))
++ifeq (0,$(shell expr $$(echo $(MAKE_VERSION) | sed "s/[^0-9\.].*//") = 3.82))
+ $(warning ********************************************************************************)
+ $(warning *  You are using version $(MAKE_VERSION) of make.)
+-$(warning *  Android can only be built by version 3.81.)
++$(warning *  Android can only be built by versions 3.81 and 3.82.)
+ $(warning *  see http://source.android.com/source/download.html)
+ $(warning ********************************************************************************)
+ $(error stopping)
+ endif
++endif
+ 
+ TOP := .
+ TOPDIR :=

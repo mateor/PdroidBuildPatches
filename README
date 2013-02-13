@@ -3,12 +3,13 @@ PdroidBuildPatches
 
 **Build Patches for the Pdroid framework**
 
-These patches are based on Syvat's original Pdroid patches, upgraded for ICS by pastime1971. These are for CM9 and work on AOKP. For AOSP, look at the ```pdroid132_aosp``` branch.
+These patches are based on Syvat's original Pdroid 1.32 patches, upgraded for ICS by pastime1971. These are for 4.0.4 AOSP. For CM9 or ICS AOKP, look at the ```4.0.4-cm9``` branch.
  
 removing previous compile
 ----------------------------------------
 
-    cd ~/android; rm -rf out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/privacy/ out/host/common/obj/JAVA_LIBRARIES/layoutlib_intermediates/classes/android/privacy/ 
+    cd ~/android; rm -rf out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/privacy/ out/host/common/obj/JAVA_LIBRARIES/layoutlib_intermediates/classes/android/privacy/
+
 #[OR] cd ~/android; make clobber
 
 removing previous patch
