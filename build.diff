@@ -1,7 +1,7 @@
-diff -Npru --exclude='.git*' cyanogen/build/core/pathmap.mk pang/build/core/pathmap.mk
---- cyanogen/build/core/pathmap.mk	2012-07-13 08:59:33.472884054 -0700
-+++ pang/build/core/pathmap.mk	2012-07-13 10:18:29.349669133 -0700
-@@ -84,6 +84,7 @@ JNI_H_INCLUDE := $(call include-path-for
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/core/pathmap.mk pang/build/core/pathmap.mk
+--- cyanogen/build/core/pathmap.mk	2012-02-12 10:46:06.619527114 -0800
++++ pang/build/core/pathmap.mk	2012-02-23 23:17:06.084418404 -0800
+@@ -77,6 +77,7 @@ JNI_H_INCLUDE := $(call include-path-for
  # is so common and the other framework libraries can have mutual
  # interdependencies.
  #
@@ -9,15 +9,15 @@ diff -Npru --exclude='.git*' cyanogen/build/core/pathmap.mk pang/build/core/path
  FRAMEWORKS_BASE_SUBDIRS := \
  	$(addsuffix /java, \
  	    core \
-@@ -95,6 +96,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
- 	    media/mca/filterpacks \
+@@ -85,6 +86,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
+ 	    media \
  	    drm \
  	    opengl \
 +	    privacy \
  	    sax \
  	    telephony \
  	    wifi \
-@@ -102,6 +104,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
+@@ -92,6 +94,7 @@ FRAMEWORKS_BASE_SUBDIRS := \
  	    icu4j \
  	    voip \
  	 )
@@ -25,9 +25,9 @@ diff -Npru --exclude='.git*' cyanogen/build/core/pathmap.mk pang/build/core/path
  
  #
  # A version of FRAMEWORKS_BASE_SUBDIRS that is expanded to full paths from
-diff -Npru --exclude='.git*' cyanogen/build/target/product/core.mk pang/build/target/product/core.mk
---- cyanogen/build/target/product/core.mk	2012-07-13 08:59:33.478885480 -0700
-+++ pang/build/target/product/core.mk	2012-07-13 10:18:29.349669133 -0700
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/core.mk pang/build/target/product/core.mk
+--- cyanogen/build/target/product/core.mk	2012-02-12 10:46:06.656529307 -0800
++++ pang/build/target/product/core.mk	2012-02-23 23:17:06.084418404 -0800
 @@ -18,6 +18,7 @@ PRODUCT_BRAND := generic
  PRODUCT_DEVICE := generic
  PRODUCT_NAME := core
@@ -44,18 +44,18 @@ diff -Npru --exclude='.git*' cyanogen/build/target/product/core.mk pang/build/ta
      PackageInstaller \
      PicoTts \
      SettingsProvider \
-@@ -117,6 +119,7 @@ PRODUCT_PACKAGES := \
-     sensorservice \
-     lint \
-     uiautomator
+@@ -94,6 +96,7 @@ PRODUCT_PACKAGES := \
+     libz \
+     screencap \
+     sensorservice
 +# END privacy-added: PDroid
  
- PRODUCT_COPY_FILES += \
-     system/core/rootdir/init.usb.rc:root/init.usb.rc \
-Binary files cyanogen/build/target/product/security/privacy.pk8 and pang/build/target/product/security/privacy.pk8 differ
-diff -Npru --exclude='.git*' cyanogen/build/target/product/security/privacy.x509.pem pang/build/target/product/security/privacy.x509.pem
+ # host-only dependencies
+ ifeq ($(WITH_HOST_DALVIK),true)
+Binary files android-2.3.4_r1.clean/build/target/product/security/privacy.pk8 and android-2.3.4_r1/build/target/product/security/privacy.pk8 differ
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/build/target/product/security/privacy.x509.pem pang/build/target/product/security/privacy.x509.pem
 --- cyanogen/build/target/product/security/privacy.x509.pem	1969-12-31 16:00:00.000000000 -0800
-+++ pang/build/target/product/security/privacy.x509.pem	2012-07-13 10:18:29.356671097 -0700
++++ pang/build/target/product/security/privacy.x509.pem	2012-02-23 23:17:06.091418819 -0800
 @@ -0,0 +1,20 @@
 +-----BEGIN CERTIFICATE-----
 +MIIDNDCCAhwCCQCXWkdOAj3rWTANBgkqhkiG9w0BAQUFADBcMQswCQYDVQQGEwJE

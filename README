@@ -1,0 +1,28 @@
+PdroidBuildPatches
+==================
+
+**Build Patches for the Pdroid framework**
+
+These patches are based on Syvat's original Pdroid patches, upgraded for ICS by pastime1971. These are for CM9 and work on AOKP. For AOSP, look at the ```4.0.4-aosp``` branch.
+ 
+removing previous compile
+----------------------------------------
+
+    cd ~/android; rm -rf out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/privacy/ out/host/common/obj/JAVA_LIBRARIES/layoutlib_intermediates/classes/android/privacy/ 
+#[OR] cd ~/android; make clobber
+
+removing previous patch
+----------------------------------------------
+    cd ~/android/build; git checkout . ; git clean -df
+    cd ~/android/libcore; git checkout . ; git clean -df
+    cd ~/android/frameworks/base; git checkout . ; git clean -df
+    cd ~/android; repo abandon pdroid; repo sync -j16
+
+applying pdroid patch
+----------------------------------------------------
+
+    cd ~/android/build; git checkout -b pdroid; patch -p2 < ~/build.diff; 
+    cd ~/android/libcore; git checkout -b pdroid; patch -p2 < ~/libcore.diff
+    cd ~/android/frameworks/base; git checkout -b pdroid; patch -p3 < ~/frameworks.diff
+    cd ~/android; . build/envsetup.sh; brunch <DEVICE_TARGET>
+
