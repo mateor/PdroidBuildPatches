@@ -1,23 +1,23 @@
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/Android.mk pang/frameworks/base/Android.mk
---- cyanogen/frameworks/base/Android.mk	2012-07-13 09:01:06.894080670 -0700
-+++ pang/frameworks/base/Android.mk	2012-07-13 10:18:29.375676051 -0700
-@@ -73,6 +73,7 @@ LOCAL_SRC_FILES := $(filter-out \
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/frameworks/base/Android.mk pang/frameworks/base/Android.mk
+--- cyanogen/frameworks/base/Android.mk	2012-02-12 10:47:47.177486510 -0800
++++ pang/frameworks/base/Android.mk	2012-02-23 23:17:06.105419651 -0800
+@@ -58,6 +58,7 @@ LOCAL_SRC_FILES := $(filter-out \
  ## across process boundaries.
  ##
  ## READ ME: ########################################################
 +# BEGIN privacy-added: IPrivacySettingsManager.aidl
  LOCAL_SRC_FILES += \
  	core/java/android/accessibilityservice/IAccessibilityServiceConnection.aidl \
- 	core/java/android/accessibilityservice/IAccessibilityServiceClient.aidl \
-@@ -215,6 +216,7 @@ LOCAL_SRC_FILES += \
+ 	core/java/android/accessibilityservice/IEventListener.aidl \
+@@ -188,6 +189,7 @@ LOCAL_SRC_FILES += \
+ 	media/java/android/media/IMediaScannerService.aidl \
+ 	media/java/android/media/IRemoteControlClient.aidl \
  	media/java/android/media/IRemoteControlDisplay.aidl \
- 	media/java/android/media/IRemoteVolumeObserver.aidl \
- 	media/java/android/media/IRingtonePlayer.aidl \
 +	privacy/java/android/privacy/IPrivacySettingsManager.aidl \
  	telephony/java/com/android/internal/telephony/IPhoneStateListener.aidl \
  	telephony/java/com/android/internal/telephony/IPhoneSubInfo.aidl \
  	telephony/java/com/android/internal/telephony/ITelephony.aidl \
-@@ -229,6 +231,7 @@ LOCAL_SRC_FILES += \
+@@ -202,6 +204,7 @@ LOCAL_SRC_FILES += \
  	voip/java/android/net/sip/ISipSessionListener.aidl \
  	voip/java/android/net/sip/ISipService.aidl
  #
@@ -25,7 +25,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/Android.mk pang/frameworks
  
  
  # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
-@@ -272,6 +275,7 @@ framework_built += $(call java-lib-deps,
+@@ -244,6 +247,7 @@ framework_built := $(call java-lib-deps,
  # AIDL files to be preprocessed and included in the SDK,
  # relative to the root of the build tree.
  # ============================================================
@@ -33,7 +33,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/Android.mk pang/frameworks
  aidl_files := \
  	frameworks/base/core/java/android/accounts/IAccountManager.aidl \
  	frameworks/base/core/java/android/accounts/IAccountManagerResponse.aidl \
-@@ -317,11 +321,13 @@ aidl_files := \
+@@ -289,11 +293,13 @@ aidl_files := \
  	frameworks/base/graphics/java/android/graphics/Region.aidl \
  	frameworks/base/location/java/android/location/Criteria.aidl \
  	frameworks/base/location/java/android/location/Location.aidl \
@@ -47,12 +47,12 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/Android.mk pang/frameworks
  $(gen): PRIVATE_SRC_FILES := $(aidl_files)
  ALL_SDK_FILES += $(gen)
  $(gen): $(aidl_files) | $(AIDL)
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/ContextImpl.java pang/frameworks/base/core/java/android/app/ContextImpl.java
---- cyanogen/frameworks/base/core/java/android/app/ContextImpl.java	2012-07-13 09:01:07.581243949 -0700
-+++ pang/frameworks/base/core/java/android/app/ContextImpl.java	2012-07-13 10:18:29.378676754 -0700
-@@ -95,6 +95,13 @@ import android.os.UserId;
- import android.os.SystemVibrator;
- import android.os.SystemProperties;
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/ContextImpl.java pang/frameworks/base/core/java/android/app/ContextImpl.java
+--- cyanogen/frameworks/base/core/java/android/app/ContextImpl.java	2012-02-12 10:47:48.228548800 -0800
++++ pang/frameworks/base/core/java/android/app/ContextImpl.java	2012-02-23 23:17:06.106419710 -0800
+@@ -79,6 +79,13 @@ import android.os.RemoteException;
+ import android.os.ServiceManager;
+ import android.os.Vibrator;
  import android.os.storage.StorageManager;
 +// BEGIN privacy-added
 +import android.privacy.IPrivacySettingsManager;
@@ -63,8 +63,8 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
 +// END privacy-added
  import android.telephony.TelephonyManager;
  import android.content.ClipboardManager;
- import android.util.*;
-@@ -165,6 +172,7 @@ class ContextImpl extends Context {
+ import android.util.AndroidRuntimeException;
+@@ -149,6 +156,7 @@ class ContextImpl extends Context {
      private Resources mResources;
      /*package*/ ActivityThread mMainThread;
      private Context mOuterContext;
@@ -72,7 +72,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
      private IBinder mActivityToken = null;
      private ApplicationContentResolver mContentResolver;
      private int mThemeResource = 0;
-@@ -278,7 +286,9 @@ class ContextImpl extends Context {
+@@ -262,7 +270,9 @@ class ContextImpl extends Context {
                  public Object createService(ContextImpl ctx) {
                      IBinder b = ServiceManager.getService(ACCOUNT_SERVICE);
                      IAccountManager service = IAccountManager.Stub.asInterface(b);
@@ -83,19 +83,19 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
                  }});
  
          registerService(ACTIVITY_SERVICE, new ServiceFetcher() {
-@@ -373,7 +383,10 @@ class ContextImpl extends Context {
-         registerService(LOCATION_SERVICE, new ServiceFetcher() {
-                 public Object createService(ContextImpl ctx) {
+@@ -347,7 +357,10 @@ class ContextImpl extends Context {
+         registerService(LOCATION_SERVICE, new StaticServiceFetcher() {
+                 public Object createStaticService() {
                      IBinder b = ServiceManager.getService(LOCATION_SERVICE);
--                    return new LocationManager(ctx, ILocationManager.Stub.asInterface(b));
+-                    return new LocationManager(ILocationManager.Stub.asInterface(b));
 +                    // BEGIN privacy-modified
 +                    ILocationManager service = ILocationManager.Stub.asInterface(b);
-+                    return new PrivacyLocationManager(service, ctx);
++                    return new PrivacyLocationManager(service,getStaticOuterContext());
 +                    // END privacy-modified
                  }});
  
          registerService(NETWORK_POLICY_SERVICE, new ServiceFetcher() {
-@@ -443,7 +456,9 @@ class ContextImpl extends Context {
+@@ -409,7 +422,9 @@ class ContextImpl extends Context {
  
          registerService(TELEPHONY_SERVICE, new ServiceFetcher() {
                  public Object createService(ContextImpl ctx) {
@@ -106,7 +106,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
                  }});
  
          registerService(THROTTLE_SERVICE, new StaticServiceFetcher() {
-@@ -505,6 +520,16 @@ class ContextImpl extends Context {
+@@ -459,6 +474,16 @@ class ContextImpl extends Context {
                  public Object createService(ContextImpl ctx) {
                      return WimaxHelper.createWimaxService(ctx, ctx.mMainThread.getHandler());
                  }});
@@ -123,7 +123,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
      }
  
      static ContextImpl getImpl(Context context) {
-@@ -1572,7 +1597,7 @@ class ContextImpl extends Context {
+@@ -1469,7 +1494,7 @@ class ContextImpl extends Context {
      }
  
      ContextImpl() {
@@ -132,7 +132,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
      }
  
      /**
-@@ -1587,7 +1612,7 @@ class ContextImpl extends Context {
+@@ -1484,7 +1509,7 @@ class ContextImpl extends Context {
          mResources = context.mResources;
          mMainThread = context.mMainThread;
          mContentResolver = context.mContentResolver;
@@ -140,8 +140,8 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
 +        sOuterContext = mOuterContext = this;
      }
  
-     static void init(ActivityThread thread) {
-@@ -1737,13 +1762,17 @@ class ContextImpl extends Context {
+     final void init(LoadedApk packageInfo,
+@@ -1544,13 +1569,17 @@ class ContextImpl extends Context {
      }
  
      final void setOuterContext(Context context) {
@@ -160,12 +160,12 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/app/Cont
      final IBinder getActivityToken() {
          return mActivityToken;
      }
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/content/ContentResolver.java pang/frameworks/base/core/java/android/content/ContentResolver.java
---- cyanogen/frameworks/base/core/java/android/content/ContentResolver.java	2012-07-13 09:01:07.723277695 -0700
-+++ pang/frameworks/base/core/java/android/content/ContentResolver.java	2012-07-13 10:18:29.381677468 -0700
-@@ -39,6 +39,9 @@ import android.os.ParcelFileDescriptor;
- import android.os.RemoteException;
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/frameworks/base/core/java/android/content/ContentResolver.java pang/frameworks/base/core/java/android/content/ContentResolver.java
+--- cyanogen/frameworks/base/core/java/android/content/ContentResolver.java	2012-02-12 10:47:48.458562426 -0800
++++ pang/frameworks/base/core/java/android/content/ContentResolver.java	2012-02-23 23:17:06.108419827 -0800
+@@ -38,6 +38,9 @@ import android.os.RemoteException;
  import android.os.ServiceManager;
+ import android.os.StrictMode;
  import android.os.SystemClock;
 +// BEGIN privacy-added
 +import android.privacy.surrogate.PrivacyContentResolver;
@@ -173,20 +173,20 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/core/java/android/content/
  import android.text.TextUtils;
  import android.util.EventLog;
  import android.util.Log;
-@@ -381,6 +384,10 @@ public abstract class ContentResolver {
-                 qCursor = stableProvider.query(uri, projection,
-                         selection, selectionArgs, sortOrder, remoteCancellationSignal);
-             }
+@@ -314,6 +317,10 @@ public abstract class ContentResolver {
+         try {
+             long startTime = SystemClock.uptimeMillis();
+             Cursor qCursor = provider.query(uri, projection, selection, selectionArgs, sortOrder);
 +            // BEGIN privacy-added
 +//            qCursor = PrivacyContentResolver.enforcePrivacyPermission(uri, mContext, qCursor);
 +            qCursor = PrivacyContentResolver.enforcePrivacyPermission(uri, projection, mContext, qCursor);
 +            // END privacy-added
              if (qCursor == null) {
+                 releaseProvider(provider);
                  return null;
-             }
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/preloaded-classes pang/frameworks/base/preloaded-classes
---- cyanogen/frameworks/base/preloaded-classes	2012-07-13 09:01:37.346316218 -0700
-+++ pang/frameworks/base/preloaded-classes	2012-07-13 10:18:29.383677944 -0700
+diff -Npru --exclude=.svn --exclude='.git*' cyanogen/frameworks/base/preloaded-classes pang/frameworks/base/preloaded-classes
+--- cyanogen/frameworks/base/preloaded-classes	2012-02-12 10:48:21.184501787 -0800
++++ pang/frameworks/base/preloaded-classes	2012-02-23 23:17:06.109419887 -0800
 @@ -652,6 +652,10 @@ android.provider.Settings$NameValueCache
  android.provider.Settings$NameValueTable
  android.provider.Settings$Secure
@@ -198,9 +198,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/preloaded-classes pang/fra
  android.renderscript.RenderScript
  android.server.BluetoothA2dpService
  android.server.BluetoothEventLoop
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl pang/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl pang/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl
 --- cyanogen/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl	2012-07-13 10:18:29.385678417 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/IPrivacySettingsManager.aidl	2012-03-29 23:12:00.187264388 -0700
 @@ -0,0 +1,18 @@
 +package android.privacy;
 +import android.privacy.PrivacySettings;
@@ -220,9 +220,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    boolean setNotificationsEnabled(boolean enable);
 +    void setBootCompleted();
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java pang/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java pang/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java	2012-07-13 10:18:29.386678654 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacyFileObserver.java	2012-03-29 23:12:00.186264318 -0700
 @@ -0,0 +1,89 @@
 +package android.privacy;
 +
@@ -314,9 +314,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    
 +}
 \ No newline at end of file
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java pang/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java pang/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java	2012-07-13 10:18:29.388679130 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacyPersistenceAdapter.java	2012-03-29 23:12:00.185264252 -0700
 @@ -0,0 +1,792 @@
 +package android.privacy;
 +
@@ -1110,17 +1110,17 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        return db;
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl	2012-07-13 10:18:29.389679367 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.aidl	2012-03-29 23:12:00.186264318 -0700
 @@ -0,0 +1,4 @@
 +package android.privacy;
 +
 +/** {@hide} */
 +parcelable PrivacySettings;
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettings.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.java	2012-07-13 10:18:29.390679604 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettings.java	2012-03-29 23:12:00.189264524 -0700
 @@ -0,0 +1,665 @@
 +package android.privacy;
 +
@@ -1787,9 +1787,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    }
 +    
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java	2012-07-13 10:18:29.392680079 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManager.java	2012-03-29 23:12:00.187264388 -0700
 @@ -0,0 +1,198 @@
 +package android.privacy;
 +
@@ -1989,9 +1989,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        }
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java	2012-07-13 10:18:29.393680317 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/PrivacySettingsManagerService.java	2012-03-29 23:12:00.188264459 -0700
 @@ -0,0 +1,142 @@
 +package android.privacy;
 +
@@ -2135,9 +2135,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        }
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java	2012-07-13 10:18:29.394680554 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyAccountManager.java	2012-03-29 23:12:00.125260786 -0700
 @@ -0,0 +1,285 @@
 +package android.privacy.surrogate;
 +
@@ -2424,9 +2424,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java	2012-07-13 10:18:29.396681029 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyActivityManagerService.java	2012-03-29 23:12:00.125260786 -0700
 @@ -0,0 +1,272 @@
 +package android.privacy.surrogate;
 +
@@ -2700,9 +2700,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        return privacyHash;
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java	2012-07-13 10:18:29.402682456 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyContentResolver.java	2012-03-29 23:12:00.126260843 -0700
 @@ -0,0 +1,171 @@
 +package android.privacy.surrogate;
 +
@@ -2875,9 +2875,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        return sb.toString();
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java	2012-07-13 10:18:29.403682693 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyCursor.java	2012-03-29 23:12:00.127260901 -0700
 @@ -0,0 +1,404 @@
 +package android.privacy.surrogate;
 +
@@ -3283,9 +3283,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +        return -1;
 +    }
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java	2012-07-13 10:18:29.405683166 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyLocationManager.java	2012-03-29 23:12:00.124260728 -0700
 @@ -0,0 +1,520 @@
 +package android.privacy.surrogate;
 +
@@ -3325,7 +3325,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    
 +    /** {@hide} */
 +    public PrivacyLocationManager(ILocationManager service, Context context) {
-+        super(context, service);
++        super(service);
 +        this.context = context;
 +//        pSetMan = (PrivacySettingsManager) context.getSystemService("privacy");
 +        pSetMan = new PrivacySettingsManager(context, IPrivacySettingsManager.Stub.asInterface(ServiceManager.getService("privacy")));        
@@ -3807,9 +3807,9 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    }
 +
 +}
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java
 --- cyanogen/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java	1969-12-31 16:00:00.000000000 -0800
-+++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java	2012-07-13 10:18:29.405683166 -0700
++++ pang/frameworks/base/privacy/java/android/privacy/surrogate/PrivacyTelephonyManager.java	2012-03-29 23:12:00.123260670 -0700
 @@ -0,0 +1,285 @@
 +package android.privacy.surrogate;
 +
@@ -4096,68 +4096,20 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/privacy/java/android/priva
 +    }
 +    
 +}
-diff -Npru cyanogen/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java pang/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java
---- cyanogen/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java	2012-07-13 09:01:37.408330957 -0700
-+++ pang/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java	2012-07-14 21:21:24.375401354 -0700
-@@ -12771,6 +12771,7 @@ public final class ActivityManagerServic
-                                 r.resultExtras, r.resultAbort, true);
-                         if (doNext) {
-                             doTrim = true;
-+                            r.queue.setContext(mContext);
-                             r.queue.processNextBroadcast(false);
-                         }
-                     }
-@@ -13278,6 +13279,7 @@ public final class ActivityManagerServic
-             }
- 
-             if (doNext) {
-+                r.queue.setContext(mContext);
-                 r.queue.processNextBroadcast(false);
-             }
-             trimApplications();
-diff -Npru cyanogen/frameworks/base/services/java/com/android/server/am/BroadcastQueue.java pang/frameworks/base/services/java/com/android/server/am/BroadcastQueue.java
---- cyanogen/frameworks/base/services/java/com/android/server/am/BroadcastQueue.java	2012-07-13 09:01:37.411331668 -0700
-+++ pang/frameworks/base/services/java/com/android/server/am/BroadcastQueue.java	2012-07-14 21:40:26.569938820 -0700
-@@ -22,6 +22,7 @@ import java.util.ArrayList;
- 
- import android.app.AppGlobals;
- import android.content.ComponentName;
-+import android.content.Context;
- import android.content.IIntentReceiver;
- import android.content.Intent;
- import android.content.pm.PackageManager;
-@@ -34,9 +35,11 @@ import android.os.Process;
- import android.os.RemoteException;
- import android.os.SystemClock;
- import android.os.UserId;
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java pang/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java
+--- cyanogen/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java	2012-03-29 23:41:14.045720104 -0700
++++ pang/frameworks/base/services/java/com/android/server/am/ActivityManagerService.java	2012-03-29 23:11:05.086052516 -0700
+@@ -138,6 +138,9 @@ import java.util.Map;
+ import java.util.concurrent.atomic.AtomicBoolean;
+ import java.util.concurrent.atomic.AtomicLong;
+ import dalvik.system.Zygote;
 +// BEGIN privacy-added
 +import android.privacy.surrogate.PrivacyActivityManagerService;
 +// END privacy-added
- import android.util.EventLog;
- import android.util.Slog;
--
- /**
-  * BROADCASTS
-  *
-@@ -444,6 +447,17 @@ public class BroadcastQueue {
-         }
-     }
  
-+    /**
-+     * {@hide} 
-+     * Copy of context for privacy protection
-+     */
-+    Context mContext = null;
-+
-+    /** {@hide} */
-+    public void setContext(Context context) {
-+        mContext = context;
-+    }
-+
-     final void processNextBroadcast(boolean fromMsg) {
-         synchronized(mService) {
-             BroadcastRecord r;
-@@ -623,6 +637,9 @@ public class BroadcastQueue {
+ public final class ActivityManagerService extends ActivityManagerNative
+         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
+@@ -11053,6 +11056,9 @@ public final class ActivityManagerServic
              }
  
              Object nextReceiver = r.receivers.get(recIdx);
@@ -4167,13 +4119,13 @@ diff -Npru cyanogen/frameworks/base/services/java/com/android/server/am/Broadcas
              if (nextReceiver instanceof BroadcastFilter) {
                  // Simple case: this is a registered receiver who gets
                  // a direct call.
-@@ -787,6 +804,33 @@ public class BroadcastQueue {
+@@ -11180,6 +11186,32 @@ public final class ActivityManagerServic
+             mPendingBroadcastRecvIndex = recIdx;
          }
      }
- 
 +    // BEGIN privacy-added
 +    private void enforcePrivacyPermission(Object nextReceiver, BroadcastRecord r) {
-+        if (mContext != null && r != null && r.intent != null && r.intent.getAction() != null) {
++        if (r != null && r.intent != null && r.intent.getAction() != null) {
 +            
 +            String packageName = null;
 +            int uid = -1;
@@ -4197,14 +4149,13 @@ diff -Npru cyanogen/frameworks/base/services/java/com/android/server/am/Broadcas
 +        }
 +    }
 +    // END privacy-added
-+
-     final void setBroadcastTimeoutLocked(long timeoutTime) {
-         if (! mPendingBroadcastTimeoutMessage) {
-             Message msg = mHandler.obtainMessage(BROADCAST_TIMEOUT_MSG, this);
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/server/SystemServer.java pang/frameworks/base/services/java/com/android/server/SystemServer.java
---- cyanogen/frameworks/base/services/java/com/android/server/SystemServer.java	2012-07-13 09:01:37.401329293 -0700
-+++ pang/frameworks/base/services/java/com/android/server/SystemServer.java	2012-07-13 10:18:29.415685540 -0700
-@@ -35,6 +35,9 @@ import android.os.ServiceManager;
+ 
+     // =========================================================
+     // INSTRUMENTATION
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/server/SystemServer.java pang/frameworks/base/services/java/com/android/server/SystemServer.java
+--- cyanogen/frameworks/base/services/java/com/android/server/SystemServer.java	2012-03-29 23:41:14.045720104 -0700
++++ pang/frameworks/base/services/java/com/android/server/SystemServer.java	2012-03-29 23:11:05.115054206 -0700
+@@ -42,6 +42,9 @@ import android.os.ServiceManager;
  import android.os.StrictMode;
  import android.os.SystemClock;
  import android.os.SystemProperties;
@@ -4214,7 +4165,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/
  import android.provider.Settings;
  import android.server.BluetoothA2dpService;
  import android.server.BluetoothService;
-@@ -199,6 +202,9 @@ class ServerThread extends Thread {
+@@ -165,6 +168,9 @@ class ServerThread extends Thread {
              Slog.i(TAG, "Content Manager");
              ContentService.main(context,
                      factoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL);
@@ -4224,10 +4175,11 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/
  
              Slog.i(TAG, "System Content Providers");
              ActivityManagerService.installSystemProviders();
-@@ -883,6 +889,16 @@ class ServerThread extends Thread {
+@@ -851,6 +854,17 @@ class ServerThread extends Thread {
          Slog.d(TAG, "Starting service: " + intent);
          context.startService(intent);
      }
++
 +    // BEGIN privacy-added
 +    private void addPrivacyService(Context context) {
 +        try {
@@ -4240,11 +4192,11 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/services/java/com/android/
 +    // END privacy-added
  }
  
- public class SystemServer {
-diff -Npru --exclude='.git*' cyanogen/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java pang/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java
---- cyanogen/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java	2012-07-13 09:01:37.449340700 -0700
-+++ pang/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java	2012-07-13 10:18:29.416685778 -0700
-@@ -16,16 +16,17 @@
+ class DemoThread extends Thread
+diff -Npru --exclude='.svn*' --exclude='.git*' cyanogen/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java pang/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java
+--- cyanogen/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java	2012-03-29 23:34:48.000000000 -0700
++++ pang/frameworks/base/telephony/java/android/telephony/PhoneStateListener.java	2012-03-29 23:11:05.352068020 -0700
+@@ -16,15 +16,16 @@
  
  package android.telephony;
  
@@ -4261,17 +4213,15 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/telephony/java/android/tel
 -import android.telephony.ServiceState;
 -import android.telephony.SignalStrength;
 -import android.telephony.CellLocation;
--import android.telephony.CellInfo;
 -import android.util.Log;
 -
 -import com.android.internal.telephony.IPhoneStateListener;
-+import android.telephony.CellInfo;	// this could be a problem !!!
  import com.android.internal.telephony.Phone;
  
  /**
-@@ -165,6 +166,28 @@ public class PhoneStateListener {
+@@ -147,6 +148,28 @@ public class PhoneStateListener {
       */
-     public static final int LISTEN_CELL_INFO = 0x00000400;
+     public static final int LISTEN_SIGNAL_STRENGTHS                         = 0x00000100;
  
 +    // BEGIN privacy-added
 +    private Context context;
@@ -4298,7 +4248,7 @@ diff -Npru --exclude='.git*' cyanogen/frameworks/base/telephony/java/android/tel
      public PhoneStateListener() {
      }
  
-@@ -323,11 +346,49 @@ public class PhoneStateListener {
+@@ -276,11 +296,49 @@ public class PhoneStateListener {
  
          public void onCellLocationChanged(Bundle bundle) {
              CellLocation location = CellLocation.newFromBundle(bundle);
